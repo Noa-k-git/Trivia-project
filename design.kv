@@ -1,0 +1,321 @@
+#:import Factory kivy.factory.Factory
+MyScreenManager:
+    
+    LoginScreen:
+    SignupScreen:
+    HomeScreen:
+    # QuestionWindow:
+
+<LoginScreen>:
+    name: 'login'
+
+    BoxLayout:
+        size_hint: None, None
+        size: 300, 400
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        elevation: 10
+        padding: 25
+        spacing: 25
+        orientation: 'vertical'
+        MDLabel:
+            text: 'WELCOME'
+            font_size: 40
+            halign: 'center'
+            size_hint_y: None
+            height: self.texture_size[1]
+            padding_y: 15
+        
+        MDTextFieldRound:
+            id: username
+            hint_text: 'username'
+            icon_right: 'account'
+            size_hint_x: None
+            width: 200
+            font_size: 18
+            pos_hint: {'center_x': 0.5}
+            
+
+        MDTextFieldRound:
+            id: password
+            hint_text: 'password'
+            icon_right: 'eye-off'
+            password: True
+            size_hint_x: None
+            width: 200
+            font_size: 18
+            pos_hint: {'center_x': 0.5}
+        
+        MDRoundFlatButton:
+            text: 'LOG IN'
+            font_size: 12
+            pos_hint: {'center_x': 0.5}
+
+            on_release:
+                if root.login(app.server_socket): \
+
+                app.root.current = 'home'
+                root.manager.transition.direction = 'left'
+                root.manager.duration = 7
+        
+        MDTextButton:
+            text: 'SIGN UP'
+            font_size: 12
+            pos_hint: {'center_x': 0.5}
+
+            on_release:
+                app.root.current = 'signup'
+                root.manager.transition.direction = 'left'
+                root.manager.duration = 7
+        Widget:
+            size_hint_y: None
+            height: 8
+
+
+<SignupScreen>:
+    name: 'signup'
+
+    MDRoundFlatButton:
+        text: 'Back'
+        font_size: 12
+        pos: 20, root.height - 50
+        on_release:
+            app.root.current = 'login'
+            root.manager.transition.direction = 'right'
+            root.manager.duration = 7
+
+    BoxLayout:
+        size_hint: None, None
+        size: 300, 400
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        elevation: 10
+        padding: 25
+        spacing: 25
+        orientation: 'vertical'
+        MDLabel:
+            text: 'WELCOME'
+            font_size: 40
+            halign: 'center'
+            size_hint_y: None
+            height: self.texture_size[1]
+            padding_y: 15
+        
+        MDTextFieldRound:
+            id: username
+            hint_text: 'username'
+            icon_right: 'account'
+            size_hint_x: None
+            width: 200
+            font_size: 18
+            pos_hint: {'center_x': 0.5}
+            
+
+        MDTextFieldRound:
+            id: password
+            hint_text: 'password'
+            icon_right: 'eye-off'
+            password: True
+            size_hint_x: None
+            width: 200
+            font_size: 18
+            pos_hint: {'center_x': 0.5}
+        
+        MDTextFieldRound:
+            id: verify_password
+            hint_text: 'verify password'
+            icon_right: 'eye-off'
+            password: True
+            size_hint_x: None
+            width: 200
+            font_size: 18
+            pos_hint: {'center_x': 0.5}
+        
+        MDRoundFlatButton:
+            text: 'SIGN UP'
+            font_size: 12
+            pos_hint: {'center_x': 0.5}
+        
+            on_release:
+                if root.sign_up(app.server_socket): \
+
+                app.root.current = 'home'
+                root.manager.transition.direction = 'left'
+                root.manager.duration = 7
+
+        Widget:
+            size_hint_y: None
+            height: 8
+
+<HomeScreen>:
+    name: 'home'
+
+    MDRoundFlatButton:
+        id:username
+        font_size: 14
+        pos: 25, root.height - 50
+        line_color: 0, 0, 0, 0
+
+    MDRoundFlatButton:
+        text: 'SCORE'
+        font_size: 12
+        pos: root.width - self.width - 25, root.height - 50
+        on_release: app.get_score()
+
+    MDRoundFlatButton:
+        text: 'HIGH SCORES'
+        font_size: 12
+        pos: root.width - self.width - 25, root.height - 100
+        on_release: Factory.HighScoreWindow().open()
+
+    MDRoundFlatButton:
+        text: 'LOGGED USERS'
+        font_size: 12
+        pos: root.width - self.width - 25, root.height - 150
+        on_release: Factory.LoggedWindow().open()
+
+
+    MDRoundFlatButton:
+        text: 'LOG OUT'
+        font_size: 12
+        pos: 25, root.height - 100
+        on_release:
+            app.logout()
+            app.root.current = 'login'
+            root.manager.transition.direction = 'right'
+            root.manager.duration = 7
+    
+
+    BoxLayout:
+        size_hint: None, None
+        size: 300, 400
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        elevation: 10
+        padding: 25
+        spacing: 25
+        orientation: 'vertical'
+        MDLabel:
+            text: 'TRIVIA GAME'
+            font_size: 40
+            halign: 'center'
+            size_hint_y: None
+            height: self.texture_size[1]
+            padding_y: 80
+            font_style:
+        
+        MDRoundFlatButton:
+            text: 'PLAY'
+            font_size: 12
+            pos_hint: {'center_x': 0.5}
+            padding_y: 80
+            font_style: 'Button'
+
+            on_release: root.play_question(app.server_socket)
+
+
+        Widget:
+            size_hint_y: None
+            height: 70
+
+
+<QuesLable@MDLabel>:
+    font_size: 14
+    size_hint: None, None
+    height: self.texture_size[1]
+    width: 500
+
+
+<QuestionWindow>:
+    name: 'question'
+    user_answer: user_answer
+    title: 'Trivia Question'
+    size_hint: None, None
+    size: 500, 600
+    auto_dismiss: False
+    Screen:
+        FloatLayout:
+            MDLabel:
+                id: question_label
+                text: root.question[1]
+                font_size: 20
+                size_hint: None, None
+                height: self.texture_size[1]
+                width: root.width - 45
+                pos: 10, root.height - self.height - self.height - 50
+                halign: 'justify'
+            
+            QuesLable:
+                id: ans1_lable
+                text: '1)  {}'.format(root.question[2])
+                pos: 10, question_label.pos[1] - 50
+
+            QuesLable:
+                id: ans2_lable
+                text: '2)  {}'.format(root.question[3])
+                pos: 10, ans1_lable.pos[1] - 30
+
+            QuesLable:
+                id: ans3_lable
+                text: '3)  {}'.format(root.question[4])
+                pos: 10, ans2_lable.pos[1] - 30
+
+            QuesLable:
+                id: ans4_lable
+                text: '4)  {}'.format(root.question[5])
+                pos: 10, ans3_lable.pos[1] - 30
+
+            MDTextField:
+                id: user_answer
+                pos: 10, ans4_lable.pos[1] - 100
+                size_hint_x: None
+                width: root.width - 40  
+                helper_text: '1 - 4'
+                helper_text_mode: 'persistent'
+            
+            MDRoundFlatButton:
+                pos: root.width / 2 - self.width / 2 , 50
+                text: 'SUBMIT'
+                on_release: if root.send_answer(app.server_socket): root.dismiss()
+
+<HighScoreWindow>:
+    title: 'High Scores'
+    size_hint: None, None
+    size: 500, 600
+    Screen:
+        FloatLayout:
+            MDLabel:
+                text: app.get_highscore()
+                font_size: 14
+                line_height: 1.4
+                size_hint: None, None
+                height: self.texture_size[1]
+                width: root.width - 45
+                pos: 10, root.height - self.height - 75
+                halign: 'justify'
+            
+            
+            MDRoundFlatButton:
+                pos: root.width / 2 - self.width / 2 , 50
+                text: 'CLOSE'
+                on_release: root.dismiss() 
+
+
+<LoggedWindow>:
+    title: 'Logged Users'
+    size_hint: None, None
+    size: 500, 600
+    Screen:
+        FloatLayout:
+            MDLabel:
+                text: app.get_logged_users()
+                font_size: 14
+                line_height: 1.4
+                size_hint: None, None
+                height: self.texture_size[1]
+                width: root.width - 45
+                pos: 10, root.height - self.height - 75
+                halign: 'justify'
+            
+            
+            MDRoundFlatButton:
+                pos: root.width / 2 - self.width / 2 , 50
+                text: 'CLOSE'
+                on_release: root.dismiss() 
